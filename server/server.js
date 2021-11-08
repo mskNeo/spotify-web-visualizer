@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const SpotifyWebApi = require('spotify-web-api-node');
 
 require('dotenv').config();
+
 const creds = { 
-    clientId: '5df20bbf39b1459d83e0182097b39224',
-    clientSecret: '2bb8612bb373402db7eb1b2eb04b2b1e',
-    redirectUri: 'http://localhost:3000',
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    redirectUri: process.env.REDIRECT_URI,
 };
 
 const PORT = 3001;
