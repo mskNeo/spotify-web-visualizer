@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import Player from './Player'
 import { ArrowLeft } from 'react-bootstrap-icons';
 import Visualizer from './Visualizer';

@@ -1,66 +1,74 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import SpotifyPlayer from 'react-spotify-web-playback'
 import '../../styles/Visualizer.css'
 
 // features to select color and shapes
 // analysis to do placements, sizes
 export default function Visualizer({ trackAnalysis, trackFeatures, playing, timeElapsed }) {
-    const [ circles, setCircles ] = useState([]);
+    const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
     const [ segmentTimes, setSegmentTimes ] = useState([]);
     const [ beats, setBeats ] = useState([]);
+    const shapes = ["circle", "square"];
     const maxR = 300;
     const padding = 50;
-    
+
+    console.log('trackAnalysis', trackAnalysis);
+    console.log('trackFeatures', trackFeatures);
         
+    // utility functions for making circles/shapes
     const getRandomDim = () => Math.floor(Math.random() * maxR);
     const getRandomX = (dim) => Math.floor(Math.random() * (window.innerWidth - dim - padding));
     const getRandomY = (dim) => Math.floor(Math.random() * (window.innerHeight - dim - padding));
+    const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
     
-    const makeCircle = useCallback(() => {
+    // make a figure based on random dimensions
+    const makeFigure = useCallback(() => {
         const dim = getRandomDim();
         const x = getRandomX(dim);
         const y = getRandomY(dim);
-        setCircles(circles => circles.concat({ dim, x, y }));
+        const color = getRandomColor();
+        const shapeClass = shapes[Math.floor(Math.random() * shapes.length)];   // choose what shape to render
+        setFigures(figures => figures.concat({ dim, x, y, color, class: shapeClass })); // add figure to figure array
     }, []);
 
-    const removeCircle = useCallback(() => {
-        setCircles(circles => circles.splice(1));
+    // remove figure funcion to limit
+    const removeFigure = useCallback(() => {
+        setFigures(figures => figures.splice(1));
     }, []);
 
+    // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.55));
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.6));
             setBeats(trackAnalysis.beats.filter(beat => beat.confidence >= 0.1));
         }
     }, [trackAnalysis]);
 
+    // check when music is playing
     useEffect(() => {
-        setSegmentTimes(segments.map(segment => parseFloat(segment.start.toFixed(4))));
-    }, [segments]);
+        console.log("playing", playing);
+    }, [playing]);
 
-    // make circles for the segments
+    // make figures for the segments when music plays
     useEffect(() => {
-        if (segments) {
-            if (playing) {
-                // console.log("segment times", segmentTimes);
-                for (let i = 0; i < segments.length; i++) {
-                    setTimeout(makeCircle, segments[i].start * 1000);
-                }
+        for (let i = 0; i < segments.length; i++) {
+            let x = setTimeout(makeFigure, segments[i].start * 1000);
+            if (!playing) {
+                clearTimeout(x);
             }
         }
-    }, [segments, playing, makeCircle]);
+    }, [segments, playing, makeFigure]);
 
     // remove circles so max 5 are on screen at one time
     useEffect(() => {
-        if (circles.length > 5) {
-            removeCircle();
+        if (figures.length > 5) {
+            removeFigure();
         }
-    }, [circles, removeCircle]);
+    }, [figures, removeFigure]);
 
     return (
         <div className="visualizerSpace">
-            {circles.map((c, i) => {
+            {figures.map((c, i) => {
                 return (
                     <div 
                         key={i} 
@@ -68,9 +76,10 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, time
                             height: `${c.dim}px`, 
                             width: `${c.dim}px`, 
                             top: `${c.y}px`,
-                            left: `${c.x}px`
+                            left: `${c.x}px`,
+                            background: `rgb(${c.color[0]}, ${c.color[1]}, ${c.color[2]})`
                             }} 
-                        className="beatCircle" />
+                        className={`beat ${c.class}`} />
                 )
             })}
         </div>
