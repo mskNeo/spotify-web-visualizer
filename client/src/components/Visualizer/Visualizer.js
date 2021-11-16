@@ -3,23 +3,26 @@ import '../../styles/Visualizer.css'
 
 // features to select color and shapes
 // analysis to do placements, sizes
-export default function Visualizer({ trackAnalysis, trackFeatures, playing, timeElapsed }) {
+export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
-    const [ segmentTimes, setSegmentTimes ] = useState([]);
+    const [ time, setTime ] = useState(0.0);
     const [ beats, setBeats ] = useState([]);
     const shapes = ["circle", "square"];
+    const rotations = ["", "deg60", "deg45", "deg30"];
+    const timeouts = [];
     const maxR = 300;
     const padding = 50;
 
-    console.log('trackAnalysis', trackAnalysis);
-    console.log('trackFeatures', trackFeatures);
+    // console.log('trackAnalysis', trackAnalysis);
+    // console.log('trackFeatures', trackFeatures);
         
-    // utility functions for making circles/shapes
+    // utility functions for making figures
     const getRandomDim = () => Math.floor(Math.random() * maxR);
     const getRandomX = (dim) => Math.floor(Math.random() * (window.innerWidth - dim - padding));
+    const getXPos = (pitch, dim) => Math.floor(pitch * (window.innerWidth - dim - padding));
     const getRandomY = (dim) => Math.floor(Math.random() * (window.innerHeight - dim - padding));
-    const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
+    const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];   
     
     // make a figure based on random dimensions
     const makeFigure = useCallback(() => {
@@ -28,7 +31,9 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, time
         const y = getRandomY(dim);
         const color = getRandomColor();
         const shapeClass = shapes[Math.floor(Math.random() * shapes.length)];   // choose what shape to render
-        setFigures(figures => figures.concat({ dim, x, y, color, class: shapeClass })); // add figure to figure array
+        const rotationClass = rotations[Math.floor(Math.random() * rotations.length)];  // choose a rotation for figures if at all
+        const classes = `${shapeClass} ${rotationClass}`;   // combine all class names to one string
+        setFigures(figures => figures.concat({ dim, x, y, color, class: classes })); // add figure to figure array
     }, []);
 
     // remove figure funcion to limit
@@ -44,20 +49,16 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, time
         }
     }, [trackAnalysis]);
 
-    // check when music is playing
+    // load set timeouts for making figures
     useEffect(() => {
-        console.log("playing", playing);
-    }, [playing]);
-
-    // make figures for the segments when music plays
-    useEffect(() => {
-        for (let i = 0; i < segments.length; i++) {
-            let x = setTimeout(makeFigure, segments[i].start * 1000);
-            if (!playing) {
-                clearTimeout(x);
+        if (playing) {
+            for (let i = 0; i < segments.length; i++) {
+                let x = setTimeout(makeFigure, segments[i].start * 1000);
+                timeouts.push(x);
             }
+            console.log("timeouts", timeouts);
         }
-    }, [segments, playing, makeFigure]);
+    }, [playing, segments]);
 
     // remove circles so max 5 are on screen at one time
     useEffect(() => {
@@ -79,7 +80,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, time
                             left: `${c.x}px`,
                             background: `rgb(${c.color[0]}, ${c.color[1]}, ${c.color[2]})`
                             }} 
-                        className={`beat ${c.class}`} />
+                        className={`figure ${c.class}`} />
                 )
             })}
         </div>

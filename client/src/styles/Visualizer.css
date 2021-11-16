@@ -8,7 +8,20 @@
     opacity: 1;
 }
 
-.beat {
+.figure {
     position: fixed;
     opacity: 1;
+    /* transition: 0.3s transform linear; */
+}
+
+.deg45 {
+    transform: rotate(45deg);
+}
+
+.deg60 {
+    transform: rotate(60deg);
+}
+
+.deg30 {
+    transform: rotate(30deg);
 }
