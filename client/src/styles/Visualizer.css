@@ -11,6 +11,7 @@
 .figure {
     position: fixed;
     opacity: 1;
+    mix-blend-mode: difference;
     /* transition: 0.3s transform linear; */
 }
 
