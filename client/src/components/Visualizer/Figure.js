@@ -3,7 +3,7 @@ import React from 'react'
 export default function Figure({ dim, x, y, color, className }) {
     return (
         <div 
-            className={ className }
+            className={className}
             style={{ 
                     height: `${dim}px`, 
                     width: `${dim}px`, 
