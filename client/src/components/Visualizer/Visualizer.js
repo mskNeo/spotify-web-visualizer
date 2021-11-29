@@ -4,6 +4,47 @@ import '../../styles/Visualizer.css'
 
 // features to select color and shapes
 // analysis to do placements, sizes
+
+/*
+ * 
+ * Segment Example:
+ * {
+ *     confidence: 1
+        duration: 0.40086
+        loudness_end: 0
+        loudness_max: -12.147
+        loudness_max_time: 0.04935
+        loudness_start: -60
+        pitches: Array(12)
+        0: 0.215
+        1: 0.492
+        2: 0.135
+        3: 0.148
+        4: 0.212
+        5: 0.339
+        6: 0.845
+        7: 0.973
+        8: 1
+        9: 0.764
+        10: 0.411
+        11: 0.218
+        length: 12
+        start: 0
+        timbre: Array(12)
+        0: 32.038
+        1: 12.596
+        2: 32.547
+        3: -218.246
+        4: 63.535
+        5: 263.998
+        6: 77.766
+        7: -41.082
+        8: -32.466
+        9: 95.46
+        10: 8.31
+        11: -1.434 
+ * }
+ */
 export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
