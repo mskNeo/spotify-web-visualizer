@@ -48,33 +48,31 @@ import '../../styles/Visualizer.css'
 export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
+    const [ time, setTime ] = useState(0.0);
+    const [ segmentTimes, setSegmentTimes ] = useState([]);
+    const countRef = useRef(null);
+    // const removedIndex = useRef(0);
     // const [ beats, setBeats ] = useState([]);
     const shapes = ["circle", "square"];
     const rotations = ["", "deg60", "deg45", "deg30"];
-    // const timeouts = [];
     const maxNumOfFigs = 10;
-    const maxR = 300;
     const minR = 20;
     const padding = 50;
-    // const removedIndex = useRef(0);
 
     // console.log('trackAnalysis', trackAnalysis);
     // console.log('trackFeatures', trackFeatures);
         
     // utility functions for making figures
-    const getRandomDim = () => Math.floor(Math.random() * (maxR - minR) + minR);
+    // const getRandomDim = () => Math.floor(Math.random() * (maxR - minR) + minR);
     const getDim = (max, start) => Math.floor((max - start) * minR);
-    // const getRandomX = (dim) => Math.floor(Math.random() * (window.innerWidth - dim - padding));
-    const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim - padding));
+    const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim - padding) + (Math.random() * (padding - 2 * padding) + padding));
     const getRandomY = (dim) => Math.floor(Math.random() * (window.innerHeight - dim - padding));
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];   
     
     // make a figure based on random dimensions
     const makeFigure = useCallback((segment) => {
         console.log("segment data", segment);
-        // const dim = getRandomDim();
         const dim = getDim(segment.loudness_max, segment.loudness_start);
-        // const x = getRandomX(dim);
         const x = getXPos(segment.pitches.indexOf(1), dim);
         const y = getRandomY(dim);
         const color = getRandomColor();
@@ -98,10 +96,14 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments.filter(segment => segment.confidence >= 0.5));
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence >= 0.2));
             // setBeats(trackAnalysis.beats.filter(beat => beat.confidence >= 0.1));
         }
     }, [trackAnalysis]);
+
+    useEffect(() => {
+        setSegmentTimes(segments.map(segment => Math.round((segment.start) * 100) / 100));
+    }, [segments]);
 
     // load set timeouts for making figures
     // pitches in segments refer to pitch classes
@@ -110,13 +112,28 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
         // first value is average loudness
         // second value is brightness
         // third is flatness of sound
+    // check when music is playing
     useEffect(() => {
+        console.log("playing", playing);
         if (playing) {
-            for (let i = 0; i < segments.length; i++) {
-                setTimeout(makeFigure.bind(null, segments[i]), segments[i].start * 1000);
+            countRef.current = setInterval(() => {
+                setTime((time) => Math.round((time + 0.01) * 100) / 100);
+            }, 10);
+
+            if (time >= segmentTimes[0]) {
+                makeFigure(segments[0]);
+                setSegmentTimes(times => times.splice(1));
+                setSegments(segments => segments.splice(1));
             }
+        } else {
+            clearInterval(countRef.current);
+            console.log("time", time);
+            console.log("segment times", segmentTimes);
         }
-    }, [playing, segments, makeFigure]);
+        return () => {
+            clearInterval(countRef.current);
+        }
+    }, [playing, time]);
 
     // remove circles so max 10 are on screen at one time
     useEffect(() => {
