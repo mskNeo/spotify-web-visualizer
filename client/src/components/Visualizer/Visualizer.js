@@ -15,6 +15,9 @@ import '../../styles/Visualizer.css'
         loudness_max: -12.147
         loudness_max_time: 0.04935
         loudness_start: -60
+
+        - pitches in segments refer to pitch classes
+        - values are how dominant/relevant each pitch is (higher number = higher relevance/confidence)
         pitches: Array(12)
         0: 0.215
         1: 0.492
@@ -30,6 +33,11 @@ import '../../styles/Visualizer.css'
         11: 0.218
         length: 12
         start: 0
+
+        - timbre refers to quality of musical note
+        -- first value is average loudness
+        -- second value is brightness
+        -- third is flatness of sound
         timbre: Array(12)
         0: 32.038
         1: 12.596
@@ -48,30 +56,20 @@ import '../../styles/Visualizer.css'
 export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
-    const [ time, setTime ] = useState(0.0);
-    const [ segmentTimes, setSegmentTimes ] = useState([]);
-    const countRef = useRef(null);
-    // const removedIndex = useRef(0);
-    // const [ beats, setBeats ] = useState([]);
-    const shapes = ["circle", "square"];
+    const shapes = ["circle", "square", "line"];
     const rotations = ["", "deg60", "deg45", "deg30"];
     const maxNumOfFigs = 10;
     const minR = 20;
     const padding = 50;
-
-    // console.log('trackAnalysis', trackAnalysis);
-    // console.log('trackFeatures', trackFeatures);
         
-    // utility functions for making figures
-    // const getRandomDim = () => Math.floor(Math.random() * (maxR - minR) + minR);
+    // utility functions for making figures;
     const getDim = (max, start) => Math.floor((max - start) * minR);
-    const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim - padding) + (Math.random() * (padding - 2 * padding) + padding));
+    const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim - padding) + (Math.random() * (4 * padding) - 2 * padding));
     const getRandomY = (dim) => Math.floor(Math.random() * (window.innerHeight - dim - padding));
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];   
     
     // make a figure based on random dimensions
     const makeFigure = useCallback((segment) => {
-        console.log("segment data", segment);
         const dim = getDim(segment.loudness_max, segment.loudness_start);
         const x = getXPos(segment.pitches.indexOf(1), dim);
         const y = getRandomY(dim);
@@ -86,59 +84,29 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     // remove figure funcion to limit
     const removeFigure = useCallback(() => {
         // remove at index
-        // setFigures(figures => {
-        //     figures.splice(removedIndex.current, 1);
-        //     return figures;
-        // });  
         setFigures(figures => figures.splice(1));
     }, []);
 
     // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments.filter(segment => segment.confidence >= 0.2));
-            // setBeats(trackAnalysis.beats.filter(beat => beat.confidence >= 0.1));
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence >= 0.25));
         }
     }, [trackAnalysis]);
 
-    useEffect(() => {
-        setSegmentTimes(segments.map(segment => Math.round((segment.start) * 100) / 100));
-    }, [segments]);
 
-    // load set timeouts for making figures
-    // pitches in segments refer to pitch classes
-        // values are how dominant/relevant each pitch is (higher number = higher relevance/confidence)
-    // timbre refers to quality of musical note
-        // first value is average loudness
-        // second value is brightness
-        // third is flatness of sound
-    // check when music is playing
+    // start visualizer when song is playing, stop when paused
     useEffect(() => {
-        console.log("playing", playing);
         if (playing) {
-            countRef.current = setInterval(() => {
-                setTime((time) => Math.round((time + 0.01) * 100) / 100);
-            }, 10);
-
-            if (time >= segmentTimes[0]) {
-                makeFigure(segments[0]);
-                setSegmentTimes(times => times.splice(1));
-                setSegments(segments => segments.splice(1));
-            }
-        } else {
-            clearInterval(countRef.current);
-            console.log("time", time);
-            console.log("segment times", segmentTimes);
-        }
-        return () => {
-            clearInterval(countRef.current);
-        }
-    }, [playing, time]);
+            segments.map(segment => {
+                return setTimeout(makeFigure.bind(null, segment), segment.start * 1000);
+            });
+        } 
+    }, [playing]);
 
     // remove circles so max 10 are on screen at one time
     useEffect(() => {
         if (figures.length > maxNumOfFigs) {
-            // removedIndex.current = (removedIndex.current + 1) % (figures.length - 1);
             removeFigure();
         }
     }, [figures, removeFigure]);
