@@ -5,14 +5,9 @@ import Visualizer from './Visualizer';
 
 export default function VisualDomain({ accessToken, playingTrack, trackAnalysis, trackFeatures, deselectTrack }) {
     const [ playing, setPlaying ] = useState(false);
-    const [ timeElapsed, setElapsed ] = useState(0.0);
 
     const setTrackStatus = useCallback((cond) => {
         setPlaying(cond);
-    }, []);
-
-    const setTrackProgress = useCallback((time) => {
-        setElapsed(time);
     }, []);
 
     if (playingTrack) {
@@ -24,13 +19,11 @@ export default function VisualDomain({ accessToken, playingTrack, trackAnalysis,
                     trackUri={playingTrack?.uri} 
                     trackAnalysis={trackAnalysis} 
                     trackFeatures={trackFeatures} 
-                    playing={playing}
-                    timeElapsed={timeElapsed}  />
+                    playing={playing}  />
                 <Player 
                     accessToken={accessToken} 
                     trackUri={playingTrack?.uri} 
-                    setTrackStatus={setTrackStatus}
-                    setTrackProgress={setTrackProgress} />
+                    setTrackStatus={setTrackStatus} />
             </div>
         )
     }
