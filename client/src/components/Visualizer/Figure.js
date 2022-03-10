@@ -8,7 +8,7 @@ export default function Figure({ dim, x, y, color, className }) {
             <div 
                 className={className}
                 style={{ 
-                        height: `${Math.random() * (15 - 5) + 5}px`,
+                        height: `${10}px`,
                         width: `${dim * 4 *  Math.sin(y / x)}px`,
                         top: `${y}px`,
                         left: `${x}px`,
@@ -20,8 +20,8 @@ export default function Figure({ dim, x, y, color, className }) {
             <div 
                 className={className}
                 style={{ 
-                        height: `${Math.random() * (1*dim - 0.9*dim) + 0.9*dim}px`, 
-                        width: `${Math.random() * (1*dim - 0.9*dim) + 0.9*dim}px`, 
+                        height: `${dim}px`, 
+                        width: `${dim}px`, 
                         top: `${y}px`,
                         left: `${x}px`,
                         background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
