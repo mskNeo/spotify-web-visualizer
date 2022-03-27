@@ -9,7 +9,7 @@ export default function Figure({ dim, x, y, color, className }) {
             <div 
                 className={className}
                 style={{ 
-                        height: `${10}px`
+                        height: `${10}px`,
                         width: `${dim * 4 *  Math.sin(y / x)}px`,
                         top: `${y}px`,
                         left: `${x}px`,
