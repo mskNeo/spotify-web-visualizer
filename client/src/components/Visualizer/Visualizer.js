@@ -11,11 +11,11 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     const index = useRef(0);
     const shapes = ["circle", "square", "line"];
     const rotations = ["", "deg60", "deg45", "deg30"];
-    const maxNumOfFigs = 10;
+    const maxNumOfFigs = 12;
     const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;    // scaling function for noises
         
     // utility functions for making figures;
-    const getDim = (max, start) => Math.floor(scale(Math.abs(max - start)));
+    const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
     const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim) + ((Math.random() * (300 - 50)) + 50));
     const getYPos = (dim) => Math.floor(Math.random() * (window.innerHeight - dim));
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];   
@@ -36,6 +36,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
         });
     }, []); // add figures as dependency for all shapes to show up, else leave blank for 1 to show up each time
 
+    // preload some figs in beginning
     useEffect(() => {
         for (let i = 0; i < maxNumOfFigs; i++) {
             setFigures(figures.concat({ 
@@ -46,12 +47,12 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
                 classes: 'figure',
             }));
         }
-    }, [])
+    }, []);
 
     // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments.filter(segment => segment.confidence >= 0.5));
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence >= 0.2));
         }
     }, [trackAnalysis]);
 
@@ -63,6 +64,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
                 const figTimeout = setTimeout(() => {
                     index.current = (index.current + 1) % maxNumOfFigs;
                     makeFigure(segment, index.current);
+                    console.log(segment);
                 }, segment.start * 1000);
 
                 return () => {

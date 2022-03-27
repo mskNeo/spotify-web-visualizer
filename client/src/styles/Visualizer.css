@@ -9,10 +9,9 @@
 
 .figure {
     position: fixed;
-    opacity: 0.9;
-    scale: 0;
-    mix-blend-mode: darken;
-    transition: all 0.3s;
+    opacity: 0.8;
+    mix-blend-mode: difference;
+    transition: all 300ms;
 }
 
 .deg45 {

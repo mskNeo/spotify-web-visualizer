@@ -20,14 +20,15 @@ export default function Figure({ dim, x, y, color, className }) {
             <div 
                 className={className}
                 style={{ 
+                        // height: `${Math.random() * (0.99 * dim) + 0.5 * dim}px`, 
+                        // width: `${Math.random() * (0.99 * dim) + 0.5 * dim}px`, 
                         height: `${dim}px`, 
                         width: `${dim}px`, 
                         top: `${y}px`,
                         left: `${x}px`,
                         background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
                         }} >
-                
-            </div>
+            </div> 
         }
         </div>
     )
