@@ -29,7 +29,6 @@ export default function Figure({ dim, x, y, color, className }) {
                             width: `${dim}px`,
                             top: `${y}px`,
                             left: `${x}px`,
-                            // background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
                             }} >
                     <img src={`https://random.imagecdn.app/${dim}/${dim}`} alt="random pic from API" />
                 </div>
@@ -45,7 +44,8 @@ export default function Figure({ dim, x, y, color, className }) {
                             width: `${dim}px`, 
                             top: `${y}px`,
                             left: `${x}px`,
-                            background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+                            background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                            mixBlendMode: "difference",
                             }} > 
                 </div>
             )

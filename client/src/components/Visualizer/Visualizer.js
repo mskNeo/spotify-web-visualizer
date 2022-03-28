@@ -9,15 +9,15 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
     const index = useRef(0);
-    const shapes = ["", "circle", "line", "image"]; // generate weights based on track features
-    const weightedShapes = {"": 0.4, "circle": 0.3, "line": 0.1, "image": 0.2 };
-    const rotations = ["", "deg60", "deg45", "deg30"];  // generate weights based on track features
+    // const shapes = ["", "circle", "line", "image"]; // generate weights based on track features
+    const weightedShapes = {"": 0.4, "circle": 0.2, "line": 0.1, "image": 0.3 };
+    // const rotations = ["", "deg60", "deg45", "deg30"];  // generate weights based on track features
     const weightedRotations = {"": 0.4, "deg60": 0.1, "deg45": 0.3, "deg30": 0.2 };
     const maxNumOfFigs = 12; // make this dependent on track features
 
     // utility functions for making figures;
-    // const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
-    const scale = (size) => (29.807 * (1.089) ** size);
+    const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
+    // const scale = (size) => (29.807 * (1.089) ** size);
     const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
     const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim) + ((Math.random() * (300 - 50)) + 50));
     const getYPos = (dim) => Math.floor(Math.random() * (window.innerHeight - dim));
