@@ -7,11 +7,15 @@
     border-radius: 50%;
 }
 
-.figure {
+.visualizerSpace div {
     position: fixed;
     opacity: 0.8;
     mix-blend-mode: difference;
     transition: all 300ms;
+}
+
+.image {
+    mix-blend-mode: none;
 }
 
 .deg45 {

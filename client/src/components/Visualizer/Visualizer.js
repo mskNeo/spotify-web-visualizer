@@ -9,16 +9,16 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
     const index = useRef(0);
-    const shapes = ["circle", "square", "line"];
+    const shapes = ["circle", "square", "line", "image"];
     const rotations = ["", "deg60", "deg45", "deg30"];
-    const maxNumOfFigs = 12;
-    const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;    // scaling function for noises
-        
+    const maxNumOfFigs = 12; 
+
     // utility functions for making figures;
+    const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
     const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
     const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim) + ((Math.random() * (300 - 50)) + 50));
     const getYPos = (dim) => Math.floor(Math.random() * (window.innerHeight - dim));
-    const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];   
+    const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
     
     // make a figure based on random dimensions
     const makeFigure = useCallback((segment, idx) => {
@@ -28,7 +28,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
         const color = getRandomColor();
         const shapeClass = shapes[Math.floor(Math.random() * shapes.length)];   // choose what shape to render
         const rotationClass = rotations[Math.floor(Math.random() * rotations.length)];  // choose a rotation for figures if at all
-        const classes = `figure ${shapeClass} ${rotationClass}`;   // combine all class names to one string
+        const classes = `${shapeClass} ${rotationClass}`;   // combine all class names to one string
         const fig = { dim, x, y, color, classes };
         setFigures(figures => {
             figures[idx] = fig;
@@ -44,7 +44,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
                 x: 0,
                 y: 0,
                 color: [0, 0, 0],
-                classes: 'figure',
+                classes: '',
             }));
         }
     }, []);
