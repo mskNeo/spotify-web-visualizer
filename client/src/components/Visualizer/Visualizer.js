@@ -11,15 +11,22 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const index = useRef(0);
     const maxVol = useRef(0);
     const minVol = useRef(100);
-    // const shapes = ["", "circle", "line", "image"]; // generate weights based on track features
     const weightedShapes = {"": 0.4, "circle": 0.2, "line": 0.1, "image": 0.3 };
-    // const rotations = ["", "deg60", "deg45", "deg30"];  // generate weights based on track features
     const weightedRotations = {"": 0.4, "deg60": 0.1, "deg45": 0.3, "deg30": 0.2 };
     const maxNumOfFigs = 12; // make this dependent on track features
 
     // utility functions for making figures;
+    // r1 is domain, r2 is range
+    function convertRange(value, r1, r2) { 
+        return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
+    }
+    const volDomain = [minVol.current, maxVol.current];
+    const volRange = [10, window.innerWidth / 1.6];
+    console.log("minVol: " + minVol.current);
+    console.log("maxVol: " + maxVol.current);
+    
     const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
-    // const scale = (size) => (29.807 * (1.089) ** size);
+    // const getDim = (max, start) => Math.floor(convertRange(Math.abs(max - start), volDomain, volRange)) + 10;
     const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
     const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim) + ((Math.random() * (300 - 50)) + 50));
     const getYPos = (dim) => Math.floor(Math.random() * (window.innerHeight - dim));
