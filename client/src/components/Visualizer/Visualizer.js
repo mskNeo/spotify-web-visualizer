@@ -5,10 +5,12 @@ import '../../styles/Visualizer.css'
 // features to select color and shapes
 // analysis to do placements, sizes
 
-export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
+export default function Visualizer({ trackAnalysis, trackFeatures, playing, setTimings }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
     const index = useRef(0);
+    const maxVol = useRef(0);
+    const minVol = useRef(100);
     // const shapes = ["", "circle", "line", "image"]; // generate weights based on track features
     const weightedShapes = {"": 0.4, "circle": 0.2, "line": 0.1, "image": 0.3 };
     // const rotations = ["", "deg60", "deg45", "deg30"];  // generate weights based on track features
@@ -41,19 +43,19 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
         const x = getXPos(segment.pitches.indexOf(1), dim);
         const y = getYPos(dim);
         const color = getRandomColor();
-        // const shapeClass = shapes[Math.floor(Math.random() * shapes.length)];   // choose what shape to render
-        const shapeClass = getWeightedProp(weightedShapes);   // choose what shape to render
-        // const rotationClass = rotations[Math.floor(Math.random() * rotations.length)];  // choose a rotation for figures if at all
+        const shapeClass = getWeightedProp(weightedShapes);   // choose what shape to renderat all
         const rotationClass = getWeightedProp(weightedRotations);  // choose a rotation for figures if at all
         const classes = `${shapeClass()} ${rotationClass()}`;   // combine all class names to one string
-        const fig = { dim, x, y, color, classes };
+        const scaledDim = (Math.random() * 2 * dim) + (0.25 * dim);    // to scale figures in one dimension and make non-perfect shapes
+        const opacity = (Math.random() * (0.7)) + 0.2;
+        const fig = { dim, x, y, color, classes, scaledDim, opacity };
         setFigures(figures => {
             figures[idx] = fig;
             return [...figures];
         });
-    }, []); // add figures as dependency for all shapes to show up, else leave blank for 1 to show up each time
+    }, []);
 
-    // preload some figs in beginning
+    // preload some figures in beginning
     useEffect(() => {
         for (let i = 0; i < maxNumOfFigs; i++) {
             setFigures(figures.concat({ 
@@ -70,7 +72,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     useEffect(() => {
         if (trackAnalysis) {
             setSegments(trackAnalysis.segments.filter(segment => segment.confidence >= 0.2));
-        }
+        } 
     }, [trackAnalysis]);
 
 
@@ -78,29 +80,48 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing }) {
     useEffect(() => {
         if (playing) {
             segments.map(segment => {
+                // get loudness values to create a scale for figure size
+                const loudness = getLoudnessValue(segment);
+                if (loudness > maxVol.current) {
+                    maxVol.current = loudness;
+                }
+                if (loudness < minVol.current) {
+                    minVol.current = loudness;
+                } 
+
                 const figTimeout = setTimeout(() => {
                     index.current = (index.current + 1) % maxNumOfFigs;
                     makeFigure(segment, index.current);
                     console.log(segment);
                 }, segment.start * 1000);
 
+                setTimings(timings => {
+                    return [...timings, figTimeout];
+                });
+
                 return () => {
-                    setTimeout(figTimeout);
+                    clearTimeout(figTimeout);
                 }
             });
         } 
     }, [playing]);
 
+    function getLoudnessValue(segment) {
+        return segment.loudness_max - segment.loudness_start;
+    }
+
     // make key random number to avoid moving around everywhere but it might be interesting
     return (
         <div className="visualizerSpace">
-            {figures.map(({ dim, x, y, color, classes }, index) => (
+            {figures.map(({ dim, x, y, color, classes, scaledDim, opacity }, index) => (
                 <Figure 
                     key={index}
                     dim={dim}
                     x={x}
                     y={y}
                     color={color}
+                    scaledDim={scaledDim}
+                    opacity={opacity}
                     className={classes}
                 />
             ))}

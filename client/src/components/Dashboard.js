@@ -19,6 +19,7 @@ export default function Dashboard({ code }) {
     const [ playingTrack, setPlayingTrack ] = useState();
     const [ trackAnalysis, setTrackAnalysis ] = useState();
     const [ trackFeatures, setTrackFeatures ] = useState();
+    const [ timings, setTimings ] = useState([]);
 
     useEffect(() => {
         if (!accessToken) return;
@@ -56,6 +57,7 @@ export default function Dashboard({ code }) {
         setPlayingTrack(null);
         setTrackAnalysis(null);
         setTrackFeatures(null);
+        timings.forEach(timing => clearTimeout(timing));
     }
 
     useEffect(() => {
@@ -95,7 +97,9 @@ export default function Dashboard({ code }) {
                     playingTrack={playingTrack} 
                     trackAnalysis={trackAnalysis} 
                     trackFeatures={trackFeatures} 
-                    deselectTrack={deselectTrack} />
+                    deselectTrack={deselectTrack} 
+                    setTimings={setTimings}
+                    />
             :
             <div>
                 <Form.Control 
