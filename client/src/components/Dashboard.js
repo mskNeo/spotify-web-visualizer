@@ -6,10 +6,10 @@ import TrackSearchResult from './TrackSearchResult';
 import VisualDomain from './Visualizer/VisualDomain';
 import '../styles/Dashboard.css';
 
-const { REACT_APP_CLIENT_ID, } = process.env;
+// const { REACT_APP_CLIENT_ID } = process.env;
 
 const spotifyApi = new SpotifyWebApi({
-    clientId: REACT_APP_CLIENT_ID,
+    clientId: '5df20bbf39b1459d83e0182097b39224',
 });
 
 export default function Dashboard({ code }) {
