@@ -1,5 +1,4 @@
 // uses https://random.responsiveimages.io/
-
 import React from 'react'
 
 export default function Figure({ dim, x, y, color, className, scaledDim, opacity }) {
@@ -27,12 +26,12 @@ export default function Figure({ dim, x, y, color, className, scaledDim, opacity
                     className={className}
                     style={{ 
                             height: `${dim}px`,
-                            width: `${scaledDim}px`,
+                            width: `${dim}px`,
                             top: `${y}px`,
                             left: `${x}px`,
                             opacity: opacity,
                             }} >
-                    <img src={`https://random.imagecdn.app/${dim}/${dim}`} alt="random pic from API" style={{ height: '100%', width: '100%'}} />
+                    <img src={`https://picsum.photos/${dim}`} alt="random pic from API" style={{ height: '100%', width: '100%'}} type="image/*" />
                 </div>
             )
         default:
@@ -44,7 +43,7 @@ export default function Figure({ dim, x, y, color, className, scaledDim, opacity
                             // height: `${Math.random() * (0.99 * dim) + 0.99 * dim}px`, 
                             // width: `${Math.random() * (0.99 * dim) + 0.99 * dim}px`, 
                             height: `${dim}px`, 
-                            width: `${scaledDim}px`, 
+                            width: `${dim}px`, 
                             top: `${y}px`,
                             left: `${x}px`,
                             opacity: opacity,
