@@ -16,6 +16,8 @@ const PORT = 3001;
 const app = express();
 app.use(cors())
     .use(bodyParser.json());
+app.use(express.static(path.resolve(__dirname, "./client/build")));
+
 
 app.post('/refresh', (req, res) => {
     const refreshToken = req.body.refreshToken;
