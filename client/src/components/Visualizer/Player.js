@@ -4,14 +4,19 @@ import SpotifyPlayer from 'react-spotify-web-playback'
 export default function Player({ accessToken, trackUri, setTrackStatus }) {
     const [play, setPlay] = useState(false);
 
-    useEffect(() => setPlay(true), [trackUri]);
+    useEffect(() => {
+        if (trackUri) {
+            setPlay(true);
+        } else {
+            setPlay(false);
+        }
+    }, [trackUri]);
     
     if (!accessToken) return null;
 
     return (
         <SpotifyPlayer 
             token={accessToken}
-            showSaveIcon
             callback={state => {
                 setTrackStatus(state.isPlaying);
                 if (!state.isPlaying) {

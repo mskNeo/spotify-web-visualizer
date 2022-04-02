@@ -31,7 +31,7 @@ export default function Figure({ dim, x, y, color, className, scaledDim, opacity
                             left: `${x}px`,
                             opacity: opacity,
                             }} >
-                    <img src={`https://picsum.photos/${dim}`} alt="random pic from API" style={{ height: '100%', width: '100%'}} type="image/*" />
+                    <img src={`https://picsum.photos/${dim}.webp`} alt="random pic from API" style={{ height: '100%', width: '100%'}} type="image/webp" />
                 </div>
             )
         default:

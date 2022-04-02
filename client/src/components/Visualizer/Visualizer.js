@@ -25,8 +25,8 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
 
     const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
     // const getDim = (loudness) => Math.floor(convertRange(Math.abs(loudness), volDomain, volRange)) + 10;
-    // const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim) + ((Math.random() * (300 - 50)) + 50));
-    const getXPos = (idx, dim) => ((window.innerWidth - dim) / maxNumOfFigs) * idx;
+    // const getXPos = (idx, dim) => ((window.innerWidth - dim) / maxNumOfFigs) * idx;
+    const getXPos = (dim) => Math.random() * (window.innerWidth - dim);
     const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch;    // 12 pitches in a scale
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
     const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
@@ -46,7 +46,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     // make a figure based on random dimensions
     const makeFigure = useCallback((segment, idx) => {
         const dim = getDim(segment.loudness_max, segment.loudness_start);
-        const x = getXPos(idx, dim);
+        const x = getXPos(dim);
         const y = getYPos(segment.pitches.indexOf(1), dim);
         const color = getRandomColor();
         const shapeClass = getWeightedProp(weightedShapes);   // choose what shape to renderat all
@@ -54,7 +54,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
         const classes = `${shapeClass()} ${rotationClass()}`;   // combine all class names to one string
         const scaledDim = (Math.random() * 1.3 * dim) + (0.7 * dim);    // to scale figures in one dimension and make non-perfect shapes
         // const scaledDim = dim * segment.loudness_max_time;    // to scale figures in one dimension and make non-perfect shapes
-        const opacity = 0.9;
+        const opacity = segment.confidence - 0.1;
         const fig = { dim, x, y, color, classes, scaledDim, opacity };
 
         setFigures(figures => {
