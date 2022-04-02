@@ -44,7 +44,7 @@ export default function Figure({ dim, x, y, color, className, scaledDim, opacity
                             // height: `${Math.random() * (0.99 * dim) + 0.99 * dim}px`, 
                             // width: `${Math.random() * (0.99 * dim) + 0.99 * dim}px`, 
                             height: `${dim}px`, 
-                            width: `${dim}px`, 
+                            width: `${scaledDim}px`, 
                             top: `${y}px`,
                             left: `${x}px`,
                             opacity: opacity,
