@@ -23,13 +23,13 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     // const volDomain = [minVol.current, maxVol.current];
     // const volRange = [10, window.innerWidth / 1.6];
 
-    const scale = (size) => (-0.032 * (size - 100.766) ** 2 + 200.933) * window.innerHeight / 100;
+    const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
     // const getDim = (loudness) => Math.floor(convertRange(Math.abs(loudness), volDomain, volRange)) + 10;
-    // const getXPos = (pitch, dim) => Math.floor((pitch / 12) * (window.innerWidth - dim) + ((Math.random() * (300 - 50)) + 50));
-    const getXPos = (idx, dim) => (window.innerWidth - dim) / maxNumOfFigs * idx;
-    const getYPos = (dim) => Math.floor(Math.random() * (window.innerHeight - dim));
+    // const getXPos = (idx, dim) => ((window.innerWidth - dim) / maxNumOfFigs) * idx;
+    const getXPos = (dim) => Math.random() * (window.innerWidth - dim);
+    const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch;    // 12 pitches in a scale
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
-    const getDim = (loudness) => Math.floor(scale(Math.abs(loudness))) + 10;
+    const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
 
     // get property based on weighted probability
     const getWeightedProp = (props) => {
@@ -45,9 +45,9 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     
     // make a figure based on random dimensions
     const makeFigure = useCallback((segment, idx) => {
-        const dim = getDim(segment.loudness_max - segment.loudness_start);
-        const x = getXPos(idx, dim);
-        const y = getYPos(dim);
+        const dim = getDim(segment.loudness_max, segment.loudness_start);
+        const x = getXPos(dim);
+        const y = getYPos(segment.pitches.indexOf(1), dim);
         const color = getRandomColor();
         const shapeClass = getWeightedProp(weightedShapes);   // choose what shape to renderat all
         const rotationClass = getWeightedProp(weightedRotations);  // choose a rotation for figures if at all
@@ -79,7 +79,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments);
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.2));
         } 
     }, [trackAnalysis]);
 
@@ -108,7 +108,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
                 });
 
                 return () => {
-                    clearTimeout(figTimeout);
+                    setTimeout(figTimeout);
                 }
             });
         } 
