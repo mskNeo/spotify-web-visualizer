@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-export default function Figure({ dim, x, y, color, className }) {
+export default function Figure({ dim, x, y, color, className, scaledDim, opacity }) {
     const shape = className.split(' ')[0];
 
     switch(shape) {
@@ -15,6 +15,7 @@ export default function Figure({ dim, x, y, color, className }) {
                             width: `${dim * 4 *  Math.sin(y / x)}px`,
                             top: `${y}px`,
                             left: `${x}px`,
+                            opacity: opacity,
                             background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
                             }} >
                     
@@ -26,12 +27,12 @@ export default function Figure({ dim, x, y, color, className }) {
                     className={className}
                     style={{ 
                             height: `${dim}px`,
-                            width: `${dim}px`,
+                            width: `${scaledDim}px`,
                             top: `${y}px`,
                             left: `${x}px`,
-                            // background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+                            opacity: opacity,
                             }} >
-                    <img src={`https://random.imagecdn.app/${dim}/${dim}`} alt="random pic from API" />
+                    <img src={`https://random.imagecdn.app/${dim}/${dim}`} alt="random pic from API" style={{ height: '100%', width: '100%'}} />
                 </div>
             )
         default:
@@ -39,13 +40,16 @@ export default function Figure({ dim, x, y, color, className }) {
                 <div 
                     className={className}
                     style={{ 
+                            // activate as option
                             // height: `${Math.random() * (0.99 * dim) + 0.99 * dim}px`, 
                             // width: `${Math.random() * (0.99 * dim) + 0.99 * dim}px`, 
                             height: `${dim}px`, 
-                            width: `${dim}px`, 
+                            width: `${scaledDim}px`, 
                             top: `${y}px`,
                             left: `${x}px`,
-                            background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+                            opacity: opacity,
+                            background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                            mixBlendMode: "difference",
                             }} > 
                 </div>
             )
