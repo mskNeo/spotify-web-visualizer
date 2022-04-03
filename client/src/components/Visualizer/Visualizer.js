@@ -16,6 +16,8 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const weightedRotations = {"": 0.2, "deg60": 0.3, "deg45": 0.2, "deg30": 0.3 };
     const maxNumOfFigs = 12; // make this dependent on track features
 
+    console.log(trackAnalysis);
+    console.log(trackFeatures);
     // utility functions for making figures;
     // r1 is domain, r2 is range
     // function convertRange(value, r1, r2) { 
@@ -30,7 +32,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const getXPos = (dim) => Math.random() * (window.innerWidth - dim);
     const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch;    // 12 pitches in a scale
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
-    const getBackgroundColor = (pitch=0) => `hsl(${255 / 12 * pitch} 100% 50%)`;
+    const getBackgroundColor = (pitch=0) => `hsl(${360 / 12 * pitch} ${trackFeatures.energy * 100}% 50%)`;
     const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
 
     // get property based on weighted probability
@@ -81,7 +83,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.2));
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.1));
         } 
     }, [trackAnalysis]);
 
@@ -102,7 +104,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
                 const figTimeout = setTimeout(() => {
                     index.current = (index.current + 1) % maxNumOfFigs;
                     makeFigure(segment, index.current);
-                    backgroundNote.current = segment.pitches.indexOf(1);
+                    if (index.current === trackFeatures.time_signature) backgroundNote.current = segment.pitches.indexOf(1);
                     if (backgroundNote.current) {
                         document.body.style = `background: ${getBackgroundColor(backgroundNote.current)}`;
                     }

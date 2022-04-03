@@ -58,6 +58,7 @@ export default function Dashboard({ code }) {
         setTrackAnalysis(null);
         setTrackFeatures(null);
         timings.forEach(timing => clearTimeout(timing));
+        document.body.style = 'background: white';
     }
 
     useEffect(() => {
