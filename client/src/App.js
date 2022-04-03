@@ -7,7 +7,7 @@ export default function App() {
   const [code, setCode] = useState();
 
   useEffect(() => {
-    setCode(() => new URLSearchParams(window.location.search).get('code'));
+    setCode(code => window.location.href.split('code=')[1]);
   }, []);
 
   return (
