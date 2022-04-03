@@ -13,7 +13,7 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 export default function Dashboard({ code }) {
-    const accessToken = useAuth('AQBzhMrChU-6u0tkff7omLL1vmKA0u2PZT033byaXzQn5cfl6KS29boPh6p3bI2GOK1Q_74VH0ZXSP5uAs6z-bcjfsIA4ckbT4Iq2dL5yNxjHJ5BQ1E1_t-J1fjJPxLitxLo1ffLmrlFTaZmsAYJCPhVsl5AihpEEyoMw51dUvHn-Z-KR2NBkBCKhIUvkCQc8PS_7zyO22r9E48QHp6Zj0Kls8YE_uWHGl3Zv5dfNkJMpRNR93YTPG0c0aer_0BET4QFqAz4rogOLJXNjdKcIApGhC5t');
+    const accessToken = useAuth(code);
     const [ search, setSearch ] = useState("");
     const [ searchResults, setSearchResults ] = useState([]);
     const [ playingTrack, setPlayingTrack ] = useState();
