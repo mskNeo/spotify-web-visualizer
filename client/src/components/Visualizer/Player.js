@@ -27,6 +27,7 @@ export default function Player({ accessToken, trackUri, setTrackStatus }) {
             uris={trackUri ? [trackUri] : []}
             styles={{
                 height: 50,
+                bgColor: 'transparent'
             }}
         />
     )
