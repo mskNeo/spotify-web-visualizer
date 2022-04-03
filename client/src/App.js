@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
-  const [code, setCode] = useState();
+  const code = useRef();
+  const [ codeParams, setCodeParams ] = useState();
 
   useEffect(() => {
-    setCode(code => window.location.href.split('code=')[1]);
+    setCodeParams(() => new URLSearchParams(window.location.search));
   }, []);
 
+  if (codeParams) code.current = codeParams.get('code');
+
   return (
-    code ? <Dashboard code={code} /> : <Login />
+    code.current ? <Dashboard code={code.current} /> : <Login />
   );
 }
