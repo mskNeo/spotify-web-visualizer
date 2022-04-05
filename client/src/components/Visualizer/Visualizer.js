@@ -12,10 +12,12 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const maxVol = useRef(0);
     const minVol = useRef(100);
     const backgroundNote = useRef();
-    const weightedShapes = {"": 0.3, "circle": 0.3, "line": 0.1, "image": 0.3 };
+    const weightedShapes = {"": 0.4, "circle": 0.3, "line": 0.1, "image": 0.2 };
     const weightedRotations = {"": 0.2, "deg60": 0.3, "deg45": 0.2, "deg30": 0.3 };
     const maxNumOfFigs = 12; // make this dependent on track features
 
+    console.log(trackAnalysis);
+    console.log(trackFeatures);
     // utility functions for making figures;
     // r1 is domain, r2 is range
     // function convertRange(value, r1, r2) { 
@@ -30,7 +32,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const getXPos = (dim) => Math.random() * (window.innerWidth - dim);
     const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch;    // 12 pitches in a scale
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
-    const getBackgroundColor = (pitch=0) => `hsl(${255 / 12 * pitch} 100% 50%)`;
+    const getBackgroundColor = (pitch=0) => `hsl(${360 / 12 * pitch} ${trackFeatures.energy * 100}% 50%)`;
     const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
 
     // get property based on weighted probability
@@ -54,7 +56,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
         const shapeClass = getWeightedProp(weightedShapes);   // choose what shape to renderat all
         const rotationClass = getWeightedProp(weightedRotations);  // choose a rotation for figures if at all
         const classes = `${shapeClass()} ${rotationClass()}`;   // combine all class names to one string
-        const scaledDim = (Math.random() * 1.1 * dim) + (0.9 * dim);    // to scale figures in one dimension and make non-perfect shapes
+        const scaledDim = (Math.random() * 0.3 * dim) + (0.7 * dim);    // to scale figures in one dimension and make non-perfect shapes
         // const scaledDim = dim * segment.loudness_max_time;    // to scale figures in one dimension and make non-perfect shapes
         const opacity = segment.confidence - 0.1;
         const fig = { dim, x, y, color, classes, scaledDim, opacity };
@@ -81,7 +83,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.2));
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.5));
         } 
     }, [trackAnalysis]);
 
@@ -102,7 +104,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
                 const figTimeout = setTimeout(() => {
                     index.current = (index.current + 1) % maxNumOfFigs;
                     makeFigure(segment, index.current);
-                    backgroundNote.current = segment.pitches.indexOf(1);
+                    if (index.current % trackFeatures.time_signature === 0) backgroundNote.current = segment.pitches.indexOf(1);
                     if (backgroundNote.current) {
                         document.body.style = `background: ${getBackgroundColor(backgroundNote.current)}`;
                     }
