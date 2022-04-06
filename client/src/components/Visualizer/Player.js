@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import SpotifyPlayer from 'react-spotify-web-playback'
 
-export default function Player({ accessToken, trackUri, setTrackStatus }) {
+export default function Player({ accessToken, trackUri, setTrackStatus, setPlayingTrack, playingTrack }) {
     const [play, setPlay] = useState(false);
 
     useEffect(() => {
@@ -18,11 +18,14 @@ export default function Player({ accessToken, trackUri, setTrackStatus }) {
         <SpotifyPlayer 
             token={accessToken}
             callback={state => {
+                console.log(state);
                 setTrackStatus(state.isPlaying);
                 if (!state.isPlaying) {
-                    setPlay(false);
+                    setPlay(true);
+                    setPlayingTrack({...playingTrack});
                 }
             }}
+            autoPlay={true}
             play={play}
             uris={trackUri ? [trackUri] : []}
             styles={{

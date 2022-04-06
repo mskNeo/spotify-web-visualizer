@@ -16,8 +16,8 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const weightedRotations = {"": 0.2, "deg60": 0.3, "deg45": 0.2, "deg30": 0.3 };
     const maxNumOfFigs = 12; // make this dependent on track features
 
-    console.log(trackAnalysis);
-    console.log(trackFeatures);
+    // console.log(trackAnalysis);
+    // console.log(trackFeatures);
     // utility functions for making figures;
     // r1 is domain, r2 is range
     // function convertRange(value, r1, r2) { 
@@ -28,7 +28,6 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
 
     const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
     // const getDim = (loudness) => Math.floor(convertRange(Math.abs(loudness), volDomain, volRange)) + 10;
-    // const getXPos = (idx, dim) => ((window.innerWidth - dim) / maxNumOfFigs) * idx;
     const getXPos = (dim) => Math.random() * (window.innerWidth - dim);
     const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch;    // 12 pitches in a scale
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
@@ -108,7 +107,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
                     if (backgroundNote.current) {
                         document.body.style = `background: ${getBackgroundColor(backgroundNote.current)}`;
                     }
-                    console.log(segment);
+                    // console.log(segment);
                 }, segment.start * 1000);
 
                 setTimings(timings => {
