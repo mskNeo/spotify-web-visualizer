@@ -105,8 +105,9 @@ export default function Dashboard({ code }) {
             :
             <div>
                 <Form.Control 
+                    size="lg"
                     type="search" 
-                    placeholder="Search Songs/Artists" 
+                    placeholder="Search for a Song or Artist on Spotify" 
                     value={search} 
                     onChange={e => setSearch(e.target.value)} />
                 <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>

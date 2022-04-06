@@ -12,7 +12,6 @@ export default function VisualDomain({ accessToken, playingTrack, setPlayingTrac
     }, []);
 
     useEffect(() => {
-        console.log("playing track changed", playingTrack);
         const playBtn = document.querySelector(".rswp__toggle");
         if (playBtn) playBtn.click();
     }, [playingTrack])
