@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import SpotifyPlayer from 'react-spotify-web-playback'
 
-export default function Player({ accessToken, trackUri, setTrackStatus, setPlayingTrack, playingTrack }) {
+export default function Player({ accessToken, trackUri, setTrackStatus }) {
     const [play, setPlay] = useState(false);
 
     useEffect(() => {
@@ -22,7 +22,8 @@ export default function Player({ accessToken, trackUri, setTrackStatus, setPlayi
                 setTrackStatus(state.isPlaying);
                 if (!state.isPlaying) {
                     setPlay(true);
-                    setPlayingTrack({...playingTrack});
+                    const playBtn = document.querySelector(".rswp__toggle");
+                    if (playBtn) playBtn.click();
                 }
             }}
             autoPlay={true}

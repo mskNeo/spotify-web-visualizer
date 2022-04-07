@@ -96,7 +96,6 @@ export default function Dashboard({ code }) {
                 <VisualDomain 
                     accessToken={accessToken} 
                     playingTrack={playingTrack} 
-                    setPlayingTrack={setPlayingTrack}
                     trackAnalysis={trackAnalysis} 
                     trackFeatures={trackFeatures} 
                     deselectTrack={deselectTrack} 
