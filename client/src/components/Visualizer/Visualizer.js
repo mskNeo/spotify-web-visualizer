@@ -9,30 +9,18 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
     const index = useRef(0);
-    const maxVol = useRef(0);
-    const minVol = useRef(100);
     const backgroundNote = useRef();
     const weightedShapes = {"": 0.4, "circle": 0.3, "line": 0.1, "image": 0.2 };
     const weightedRotations = {"": 0.2, "deg60": 0.3, "deg45": 0.2, "deg30": 0.3 };
     const maxNumOfFigs = 12; // make this dependent on track features
-
-    console.log(trackAnalysis);
-    console.log(trackFeatures);
-    // utility functions for making figures;
-    // r1 is domain, r2 is range
-    // function convertRange(value, r1, r2) { 
-    //     return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
-    // }
-    // const volDomain = [minVol.current, maxVol.current];
-    // const volRange = [10, window.innerWidth / 1.6];
-
-    const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
-    // const getDim = (loudness) => Math.floor(convertRange(Math.abs(loudness), volDomain, volRange)) + 10;
-    // const getXPos = (idx, dim) => ((window.innerWidth - dim) / maxNumOfFigs) * idx;
+    
+    // const getDim = (max, start) => Math.floor(convertRange(Math.abs(max - start), volDomain, volRange)) + 10;
     const getXPos = (dim) => Math.random() * (window.innerWidth - dim);
     const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch;    // 12 pitches in a scale
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
     const getBackgroundColor = (pitch=0) => `hsl(${360 / 12 * pitch} ${trackFeatures.energy * 100}% 50%)`;
+    // const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
+    const scale = (size) => 4299.42 * Math.cbrt(size - 243.171) + 26807.2;
     const getDim = (max, start) => Math.floor(scale(Math.abs(max - start))) + 10;
 
     // get property based on weighted probability
@@ -83,7 +71,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     // load segments and beats when trackAnalysis received
     useEffect(() => {
         if (trackAnalysis) {
-            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.5));
+            setSegments(trackAnalysis.segments.filter(segment => segment.confidence > 0.25));
         } 
     }, [trackAnalysis]);
 
@@ -92,15 +80,6 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     useEffect(() => {
         if (playing) {
             segments.map(segment => {
-                // get loudness values to create a scale for figure size
-                const loudness = getLoudnessValue(segment);
-                if (loudness > maxVol.current) {
-                    maxVol.current = loudness;
-                }
-                if (loudness < minVol.current) {
-                    minVol.current = loudness;
-                } 
-
                 const figTimeout = setTimeout(() => {
                     index.current = (index.current + 1) % maxNumOfFigs;
                     makeFigure(segment, index.current);
@@ -108,7 +87,6 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
                     if (backgroundNote.current) {
                         document.body.style = `background: ${getBackgroundColor(backgroundNote.current)}`;
                     }
-                    console.log(segment);
                 }, segment.start * 1000);
 
                 setTimings(timings => {

@@ -18,15 +18,20 @@ export default function Player({ accessToken, trackUri, setTrackStatus }) {
         <SpotifyPlayer 
             token={accessToken}
             callback={state => {
+                console.log(state);
                 setTrackStatus(state.isPlaying);
                 if (!state.isPlaying) {
-                    setPlay(false);
+                    setPlay(true);
+
+                    const playBtn = document.querySelector(".rswp__toggle");
+                    if (playBtn) playBtn.click();
                 }
             }}
+            autoPlay={true}
             play={play}
             uris={trackUri ? [trackUri] : []}
             styles={{
-                height: 50,
+                height: 60,
                 bgColor: 'transparent'
             }}
         />

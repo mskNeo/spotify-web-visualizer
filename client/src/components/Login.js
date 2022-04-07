@@ -7,11 +7,12 @@ const scope = [
     'user-read-email',
     'user-read-private',
     'user-library-read',
-    'user-read-playback-state'
+    'user-read-playback-state',
+    'user-modify-playback-state',
 ];
 
 // let AUTH_URL = 'https://accounts.spotify.com/authorize?client_id=5df20bbf39b1459d83e0182097b39224&response_type=code&redirect_uri=https://spotify-web-visualizer.herokuapp.com/&show_dialog=true&scope=streaming';
-let AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${REACT_APP_REDIRECT_URI}&show_dialog=true&scope=streaming`;
+let AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${REACT_APP_REDIRECT_URI}&scope=streaming`;
 
 export default function Login() {
 

@@ -6,10 +6,10 @@ import TrackSearchResult from './TrackSearchResult';
 import VisualDomain from './Visualizer/VisualDomain';
 import '../styles/Dashboard.css';
 
-// const { REACT_APP_CLIENT_ID } = process.env;
+const { REACT_APP_CLIENT_ID } = process.env;
 
 const spotifyApi = new SpotifyWebApi({
-    clientId: '5df20bbf39b1459d83e0182097b39224',
+    clientId: REACT_APP_CLIENT_ID,
 });
 
 export default function Dashboard({ code }) {
@@ -104,8 +104,9 @@ export default function Dashboard({ code }) {
             :
             <div>
                 <Form.Control 
+                    size="lg"
                     type="search" 
-                    placeholder="Search Songs/Artists" 
+                    placeholder="Search for a Song or Artist on Spotify" 
                     value={search} 
                     onChange={e => setSearch(e.target.value)} />
                 <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
