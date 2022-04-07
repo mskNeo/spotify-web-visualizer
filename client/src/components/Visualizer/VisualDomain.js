@@ -23,9 +23,9 @@ export default function VisualDomain({ accessToken, playingTrack, trackAnalysis,
                                 zIndex: "1000",
                                 color: "white",
                                 position: "absolute",
-                                mixBlendMode: "exclusion" }}
-                            onMouseEnter={(e) => e.target.style.mixBlendMode = 'normal'}
-                            onMouseLeave={(e) => e.target.style.mixBlendMode = 'exclusion'} />
+                                mixBlendMode: "difference" }}
+                            onMouseEnter={(e) => e.target.style.mixBlendMode = "normal"}
+                            onMouseLeave={(e) => e.target.style.mixBlendMode = "difference"} />
                         <Visualizer 
                             accessToken={accessToken} 
                             trackUri={playingTrack?.uri} 

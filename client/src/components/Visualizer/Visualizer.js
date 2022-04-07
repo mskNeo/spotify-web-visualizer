@@ -100,10 +100,6 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
         } 
     }, [playing]);
 
-    function getLoudnessValue(segment) {
-        return Math.abs(segment.loudness_max - segment.loudness_start);
-    }
-
     // make key random number to avoid moving around everywhere but it might be interesting
     return (
         <div className="visualizerSpace">
