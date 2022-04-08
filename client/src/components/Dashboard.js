@@ -53,11 +53,15 @@ export default function Dashboard({ code }) {
         setSearch('');
     }
 
+    function clearTimings() {
+        timings.forEach(timing => clearTimeout(timing));
+    }
+
     function deselectTrack() {
         setPlayingTrack(null);
         setTrackAnalysis(null);
         setTrackFeatures(null);
-        timings.forEach(timing => clearTimeout(timing));
+        clearTimings();
         document.body.style = 'background: white';
     }
 
@@ -100,6 +104,7 @@ export default function Dashboard({ code }) {
                     trackFeatures={trackFeatures} 
                     deselectTrack={deselectTrack} 
                     setTimings={setTimings}
+                    clearTimings={clearTimings}
                     />
             :
             <div>

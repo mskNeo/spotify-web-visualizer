@@ -5,7 +5,7 @@ import '../../styles/Visualizer.css'
 // features to select color and shapes
 // analysis to do placements, sizes
 
-export default function Visualizer({ trackAnalysis, trackFeatures, playing, setTimings }) {
+export default function Visualizer({ trackAnalysis, trackFeatures, playing, setTimings, clearTimings }) {
     const [ figures, setFigures ] = useState([]);
     const [ segments, setSegments ] = useState([]);
     const index = useRef(0);
@@ -16,7 +16,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     
     // const getDim = (max, start) => Math.floor(convertRange(Math.abs(max - start), volDomain, volRange)) + 10;
     const getXPos = (dim) => Math.random() * (window.innerWidth - dim);
-    const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch;    // 12 pitches in a scale
+    const getYPos = (pitch, dim) => ((window.innerHeight - dim) / 12) * pitch + (Math.random() * 100 - 50);     // divide vertical dimension into 12 sections
     const getRandomColor = () => [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];  
     const getBackgroundColor = (pitch=0) => `hsl(${360 / 12 * pitch} ${trackFeatures.energy * 100}% 50%)`;
     // const scale = (size) => (-0.022 * (size - 115.766) ** 2 + 296.933) * window.innerHeight / 100;
@@ -98,8 +98,12 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
                 }
             });
         } 
+        // pause
+        // else {
+        //     clearTimings();
+        // }
     }, [playing]);
-    
+
     // make key random number to avoid moving around everywhere but it might be interesting
     return (
         <div className="visualizerSpace">

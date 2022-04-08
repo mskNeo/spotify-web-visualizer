@@ -3,7 +3,7 @@ import { ArrowLeftCircleFill } from 'react-bootstrap-icons';
 import Player from './Player'
 import Visualizer from './Visualizer';
 
-export default function VisualDomain({ accessToken, playingTrack, trackAnalysis, trackFeatures, deselectTrack, setTimings }) {
+export default function VisualDomain({ accessToken, playingTrack, trackAnalysis, trackFeatures, deselectTrack, setTimings, clearTimings }) {
     const [ playing, setPlaying ] = useState(false);
 
     const setTrackStatus = useCallback((cond) => {
@@ -32,7 +32,8 @@ export default function VisualDomain({ accessToken, playingTrack, trackAnalysis,
                             trackAnalysis={trackAnalysis} 
                             trackFeatures={trackFeatures} 
                             playing={playing}
-                            setTimings={setTimings}  />
+                            setTimings={setTimings}
+                            clearTimings={clearTimings}  />
                         <Player 
                             accessToken={accessToken} 
                             trackUri={playingTrack?.uri} 
