@@ -8,8 +8,8 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const index = useRef(0);
     const backgroundNote = useRef();
     const weightedShapes = {"": 0.4, "circle": 0.3, "line": 0.1, "image": 0.2 };
-    const weightedRotations = {"": 0.3, "rotate60": 0.2, "rotate45": 0.2, "rotate30": 0.3 };
-    const weightedSkews = {"": 0.5, "skew40": 0.1, "skew20": 0.2, "skew10": 0.2 };
+    const weightedRotations = {"0deg": 0.3, "60deg": 0.2, "45deg": 0.2, "30deg": 0.3 };
+    const weightedSkews = {"0deg": 0.5, "40deg": 0.1, "20deg": 0.2, "10deg": 0.2 };
     const maxNumOfFigs = 12; // make this dependent on track features
     
     // const getDim = (max, start) => Math.floor(convertRange(Math.abs(max - start), volDomain, volRange)) + 10;
@@ -42,7 +42,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
         const shapeClass = getWeightedProp(weightedShapes);   // choose what shape to renderat all
         const rotationClass = getWeightedProp(weightedRotations);  // choose a rotation for figures if at all
         const skewClass = getWeightedProp(weightedSkews);  // choose a skew for figures if at all
-        const classes = `${shapeClass()} ${rotationClass()} ${skewClass()}`;   // combine all class names to one string
+        const classes = `${shapeClass()} rotate(${rotationClass()}) skew(${skewClass()},${skewClass()})`;   // combine all class names to one string
         const scaledDim = (Math.random() * 0.6 * dim) + (0.7 * dim);    // to scale figures in one dimension and make non-perfect shapes
         // const scaledDim = dim * segment.loudness_max_time;    // to scale figures in one dimension and make non-perfect shapes
         const opacity = segment.confidence - 0.1;
@@ -114,7 +114,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
                     color={color}
                     scaledDim={scaledDim}
                     opacity={opacity}
-                    className={classes}
+                    classes={classes}
                 />
             ))}
         </div>

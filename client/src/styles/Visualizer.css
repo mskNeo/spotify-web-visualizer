@@ -16,7 +16,7 @@ body {
     transition: all 300ms;
 }
 
-.rotate45 {
+/* .rotate45 {
     transform: rotate(45deg);
 }
 
@@ -27,3 +27,15 @@ body {
 .rotate30 {
     transform: rotate(30deg);
 }
+
+.skew40 {
+    transform: rotate(45deg);
+}
+
+.skew20 {
+    transform: rotate(60deg);
+}
+
+.skew10 {
+    transform: rotate(30deg);
+} */

@@ -1,21 +1,27 @@
 // uses https://random.responsiveimages.io/
 import React from 'react'
 
-export default function Figure({ dim, x, y, color, className, scaledDim, opacity }) {
-    const shape = className.split(' ')[0];
+export default function Figure({ dim, x, y, color, classes, scaledDim, opacity }) {
+    let classNames = classes.split(' ')[0];
+    const shape = classNames.shift();
+    let transform = 'transform:';
+    for (let i = 0; i < classNames.length; i++) {
+        transform += ' ' + classNames[i];
+    }
 
     switch(shape) {
         case 'line':
             return (
                 <div 
-                    className={className}
+                    className={shape}
                     style={{ 
                             height: `${10}px`,
                             width: `${dim * 4 *  Math.sin(y / x)}px`,
                             top: `${y}px`,
                             left: `${x}px`,
                             opacity: opacity,
-                            background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+                            background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                            transform
                             }} >
                     
                 </div>
@@ -23,13 +29,14 @@ export default function Figure({ dim, x, y, color, className, scaledDim, opacity
         case 'image':
             return (
                 <div 
-                    className={className}
+                    className={shape}
                     style={{ 
                             height: `${dim}px`,
                             width: `${scaledDim}px`,
                             top: `${y}px`,
                             left: `${x}px`,
                             opacity: opacity,
+                            transform
                             }} >
                     <img src={`https://picsum.photos/${dim}.webp`} alt="random pic from API" style={{ height: '100%', width: '100%'}} type="image/webp" />
                 </div>
@@ -37,7 +44,7 @@ export default function Figure({ dim, x, y, color, className, scaledDim, opacity
         default:
             return(
                 <div 
-                    className={className}
+                    className={shape}
                     style={{ 
                             // activate as option
                             // height: `${Math.random() * (0.99 * dim) + 0.99 * dim}px`, 
@@ -49,6 +56,7 @@ export default function Figure({ dim, x, y, color, className, scaledDim, opacity
                             opacity: opacity,
                             background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
                             mixBlendMode: "difference",
+                            transform
                             }} > 
                 </div>
             )
