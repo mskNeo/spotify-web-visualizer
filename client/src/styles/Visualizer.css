@@ -16,14 +16,14 @@ body {
     transition: all 300ms;
 }
 
-.deg45 {
+.rotate45 {
     transform: rotate(45deg);
 }
 
-.deg60 {
+.rotate60 {
     transform: rotate(60deg);
 }
 
-.deg30 {
+.rotate30 {
     transform: rotate(30deg);
 }
