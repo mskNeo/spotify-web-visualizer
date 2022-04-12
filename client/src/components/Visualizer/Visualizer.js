@@ -9,7 +9,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const backgroundNote = useRef();
     const weightedShapes = {"": 0.4, "circle": 0.3, "line": 0.1, "image": 0.2 };
     const weightedRotations = {"0deg": 0.3, "60deg": 0.2, "45deg": 0.2, "30deg": 0.3 };
-    const weightedSkews = {"0deg": 0.5, "40deg": 0.1, "20deg": 0.2, "10deg": 0.2 };
+    const weightedSkews = {"0deg": 0.7, "40deg": 0.1, "20deg": 0.1, "10deg": 0.1 };
     const maxNumOfFigs = 12; // make this dependent on track features
     
     // const getDim = (max, start) => Math.floor(convertRange(Math.abs(max - start), volDomain, volRange)) + 10;

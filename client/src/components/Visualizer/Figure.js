@@ -2,12 +2,14 @@
 import React from 'react'
 
 export default function Figure({ dim, x, y, color, classes, scaledDim, opacity }) {
-    let classNames = classes.split(' ')[0];
+    let classNames = classes.split(' ');
     const shape = classNames.shift();
-    let transform = 'transform:';
+    let transforms = '';
     for (let i = 0; i < classNames.length; i++) {
-        transform += ' ' + classNames[i];
+        transforms += ' ' + classNames[i];
     }
+
+    console.log(transforms);
 
     switch(shape) {
         case 'line':
@@ -21,7 +23,7 @@ export default function Figure({ dim, x, y, color, classes, scaledDim, opacity }
                             left: `${x}px`,
                             opacity: opacity,
                             background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
-                            transform
+                            transform: transforms
                             }} >
                     
                 </div>
@@ -36,7 +38,7 @@ export default function Figure({ dim, x, y, color, classes, scaledDim, opacity }
                             top: `${y}px`,
                             left: `${x}px`,
                             opacity: opacity,
-                            transform
+                            transform: transforms
                             }} >
                     <img src={`https://picsum.photos/${dim}.webp`} alt="random pic from API" style={{ height: '100%', width: '100%'}} type="image/webp" />
                 </div>
@@ -56,7 +58,7 @@ export default function Figure({ dim, x, y, color, classes, scaledDim, opacity }
                             opacity: opacity,
                             background: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
                             mixBlendMode: "difference",
-                            transform
+                            transform: transforms
                             }} > 
                 </div>
             )
