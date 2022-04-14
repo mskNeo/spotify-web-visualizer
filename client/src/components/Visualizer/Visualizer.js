@@ -7,7 +7,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const [ segments, setSegments ] = useState([]);
     const index = useRef(0);
     const backgroundNote = useRef();
-    const weightedShapes = {"": 0.3, "circle": 0.2, "line": 0.1, "image": 0.2, "triangle": 0.2 };
+    const weightedShapes = {"": 0.35, "circle": 0.2, "line": 0.1, "image": 0.2, "triangle": 0.15 };
     const weightedRotations = {"0deg": 0.3, "60deg": 0.2, "45deg": 0.2, "30deg": 0.3 };
     const weightedSkews = {"0deg": 0.85, "40deg": 0.05, "20deg": 0.05, "10deg": 0.05 };
     const maxNumOfFigs = 12; // make this dependent on track features
