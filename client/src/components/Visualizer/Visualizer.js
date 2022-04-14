@@ -7,9 +7,9 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
     const [ segments, setSegments ] = useState([]);
     const index = useRef(0);
     const backgroundNote = useRef();
-    const weightedShapes = {"": 0.4, "circle": 0.3, "line": 0.1, "image": 0.2 };
+    const weightedShapes = {"": 0.3, "circle": 0.2, "line": 0.1, "image": 0.2, "triangle": 0.2 };
     const weightedRotations = {"0deg": 0.3, "60deg": 0.2, "45deg": 0.2, "30deg": 0.3 };
-    const weightedSkews = {"0deg": 0.7, "40deg": 0.1, "20deg": 0.1, "10deg": 0.1 };
+    const weightedSkews = {"0deg": 0.85, "40deg": 0.05, "20deg": 0.05, "10deg": 0.05 };
     const maxNumOfFigs = 12; // make this dependent on track features
     
     // const getDim = (max, start) => Math.floor(convertRange(Math.abs(max - start), volDomain, volRange)) + 10;
@@ -26,7 +26,7 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
         let table = [];
         for (let i in props) {
             // multiply by 10 to get whole numbers
-            for (let j = 0; j < props[i] * 10; j++) {
+            for (let j = 0; j < props[i] * 100; j++) {
                 table.push(i);
             };
         }
