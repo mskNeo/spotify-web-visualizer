@@ -99,9 +99,9 @@ export default function Visualizer({ trackAnalysis, trackFeatures, playing, setT
             });
         } 
         // pause
-        // else {
-        //     clearTimings();
-        // }
+        else {
+            clearTimings();
+        }
     }, [playing]);
 
     // make key random number to avoid moving around everywhere but it might be interesting
